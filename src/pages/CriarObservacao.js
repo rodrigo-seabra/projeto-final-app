@@ -1,36 +1,49 @@
-import React, { useEffect, useState } from 'react'
-import { ScrollView, View, TextInput, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
+import React, { useState } from "react";
+import {
+  ScrollView,
+  View,
+  Button,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Modal,
+} from "react-native";
 
+import SelectDate from "../components/SelectDate"; // Certifique-se de que o nome do componente exportado corresponde
 
 export default function CriarObservacao({ backToHome, usuarioId, objetoId }) {
-  const [observacoesDescricao, setObservacoesDescricao] = useState('');
-  const [observacoesData, setObservacoesData] = useState('');
-  const [sucesso, setSucesso] = useState(false)
-  const [erro, setErro] = useState(false)
+  const [observacoesDescricao, setObservacoesDescricao] = useState("");
+  const [observacoesData, setObservacoesData] = useState(new Date());
+  const [sucesso, setSucesso] = useState(false);
+  const [erro, setErro] = useState(false);
 
   async function postObservacao() {
-        await fetch('http://10.139.75.37:5251/api/Observacoes/CreateObservacao', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        observacoesDescricao: observacoesDescricao,
-        observacoesData: "2024-06-05T17:47:01.781Z",
-        usuarioId: usuarioId,
-        objetoId: objetoId
-      })
-    }).then(res => {
-      if (res.status == 200) {
-        setSucesso(true);
-        setObservacoesDescricao('');
-        setObservacoesData('');
-      } else {
-        throw new Error('Failed to create observation');
+    await fetch(
+      "http://192.168.7.10000:5251/api/Observacoes/CreateObservacao",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          observacoesDescricao: observacoesDescricao,
+          observacoesData: observacoesData.toISOString(),
+          usuarioId: usuarioId,
+          objetoId: objetoId,
+        }),
       }
-    })
-      .catch(err => setError(true))
-
+    )
+      .then((res) => {
+        if (res.status == 200) {
+          setSucesso(true);
+          setObservacoesDescricao("");
+          setObservacoesData(new Date());
+        } else {
+          throw new Error("Failed to create observation");
+        }
+      })
+      .catch((err) => setErro(true));
   }
 
   return (
@@ -47,15 +60,12 @@ export default function CriarObservacao({ backToHome, usuarioId, objetoId }) {
           onChangeText={(text) => setObservacoesDescricao(text)}
         />
       </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Data da observação (YYYY-MM-DDTHH:MM:SS.sssZ)"
-          placeholderTextColor="#fff"
-          value={observacoesData}
-          onChangeText={(text) => setObservacoesData(text)}
-        />
-      </View>
+      <SelectDate
+        date={observacoesData}
+        onChange={(event, selectedDate) =>
+          setObservacoesData(selectedDate || observacoesData)
+        }
+      />
       <TouchableOpacity style={styles.loginBtn} onPress={postObservacao}>
         <Text style={styles.loginText}>Cadastrar Observação</Text>
       </TouchableOpacity>
@@ -69,7 +79,9 @@ export default function CriarObservacao({ backToHome, usuarioId, objetoId }) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Observação cadastrada com sucesso!</Text>
+            <Text style={styles.modalText}>
+              Observação cadastrada com sucesso!
+            </Text>
             <TouchableOpacity
               style={styles.modalButton}
               onPress={() => setSucesso(false)}
@@ -89,7 +101,9 @@ export default function CriarObservacao({ backToHome, usuarioId, objetoId }) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Erro ao cadastrar observação. Revise os campos e tente novamente.</Text>
+            <Text style={styles.modalText}>
+              Erro ao cadastrar observação. Revise os campos e tente novamente.
+            </Text>
             <TouchableOpacity
               style={styles.modalButton}
               onPress={() => setErro(false)}
@@ -107,61 +121,72 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     flexGrow: 1,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#000",
+    alignItems: "center",
+    justifyContent: "center",
   },
   backButton: {
-    position: 'absolute',
+    position: "absolute",
     top: -100,
     left: 15,
-    backgroundColor: '#32CD32',
+    backgroundColor: "#32CD32",
     padding: 10,
     borderRadius: 5,
   },
   backButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   inputView: {
-    width: '85%',
-    backgroundColor: '#696969',
+    width: "85%",
+    backgroundColor: "#696969",
     borderRadius: 5,
     height: 60,
     marginBottom: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 20,
   },
   inputText: {
     height: 65,
-    color: '#fff',
+    color: "#fff",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   loginBtn: {
-    width: '85%',
-    backgroundColor: '#32CD32',
+    width: "85%",
+    backgroundColor: "#32CD32",
     borderRadius: 5,
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 10,
     marginBottom: 10,
   },
   loginText: {
-    color: 'white',
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 18,
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalView: {
-    width: '80%',
-    backgroundColor: '#fff',
+    width: "80%",
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -172,17 +197,20 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
   },
   modalButton: {
-    backgroundColor: '#32CD32',
+    backgroundColor: "#32CD32",
     borderRadius: 5,
     padding: 10,
     elevation: 2,
   },
   modalButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
 });
