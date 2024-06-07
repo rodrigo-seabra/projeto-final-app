@@ -19,21 +19,18 @@ export default function CriarObservacao({ backToHome, usuarioId, objetoId }) {
   const [erro, setErro] = useState(false);
 
   async function postObservacao() {
-    await fetch(
-      "http://192.168.7.10000:5251/api/Observacoes/CreateObservacao",
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          observacoesDescricao: observacoesDescricao,
-          observacoesData: observacoesData.toISOString(),
-          usuarioId: usuarioId,
-          objetoId: objetoId,
-        }),
-      }
-    )
+    await fetch("http://192.168.7.100:5251/api/Observacoes/CreateObservacao", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        observacoesDescricao: observacoesDescricao,
+        observacoesData: observacoesData.toISOString(),
+        usuarioId: usuarioId,
+        objetoId: objetoId,
+      }),
+    })
       .then((res) => {
         if (res.status == 200) {
           setSucesso(true);
