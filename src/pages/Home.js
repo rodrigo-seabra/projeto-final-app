@@ -35,7 +35,7 @@ export default function Home() {
   const [error, setError] = useState(false);
 
   async function getObjetos() {
-    await fetch("http://192.168.7.100:5251/api/Objeto/GetAllObjetos", {
+    await fetch("http://192.168.7.100:5251/api/Objeto/GetAllMissingObj", {
       method: "GET",
       headers: { "content-type": "application/json" },
     })

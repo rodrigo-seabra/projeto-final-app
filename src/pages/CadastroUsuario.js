@@ -12,6 +12,7 @@ import {
 import React, { useContext, useState } from "react";
 import { Modal } from "react-native";
 import CustomAlert from "../components/CustomAlert";
+import { AuthContext } from "../context/AuthContext";
 
 export default function CadastroUsuario() {
   const [email, setEmail] = useState("");
@@ -21,43 +22,24 @@ export default function CadastroUsuario() {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
+  const { cadastro, error, RealizaCadastro } = useContext(AuthContext);
 
-  async function RealizaCadastro() {
-    await fetch("http://192.168.7.100:5251/api/Usuario/CreateUser", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        usuarioEmail: email,
-        usuarioNome: username,
-        usuarioSenha: password,
-        usuarioTelefone: phone,
-      }),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        setAlertMessage(
-          json.usuarioId
-            ? "Cadastro realizado com sucesso!"
-            : "Erro ao cadastrar. Tente novamente."
-        );
-        setAlertType(json.usuarioId ? "success" : "error");
-        setAlertVisible(true);
-        setEmail("");
-        setPhone("");
-        setPassword("");
-        setUsername("");
-      })
-      .catch((err) => {
-        setAlertMessage("Erro ao cadastrar. Tente novamente.");
-        setAlertType("error");
-        setAlertVisible(true);
-      });
+  if (error) {
+    setAlertVisible(true);
+    setAlertMessage("Erro ao cadastrar. Tente novamente.");
+    setAlertType("error");
+  } else if (cadastro) {
+    setAlertVisible(true);
+    setAlertMessage("Cadastro realizado com sucesso!");
+    setAlertType("success");
   }
 
   function closeAlert() {
     setAlertVisible(false);
+  }
+
+  function Cadastro() {
+    RealizaCadastro(email, username, password, phone);
   }
 
   return (
@@ -106,7 +88,7 @@ export default function CadastroUsuario() {
             onChangeText={(digatado) => setPassword(digatado)}
           />
         </View>
-        <TouchableOpacity style={styles.loginBtn} onPress={RealizaCadastro}>
+        <TouchableOpacity style={styles.loginBtn} onPress={Cadastro}>
           <Text style={styles.loginText}>CADASTRAR</Text>
         </TouchableOpacity>
         <Modal

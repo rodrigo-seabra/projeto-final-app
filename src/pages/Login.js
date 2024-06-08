@@ -1,6 +1,15 @@
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, ScrollView, Image } from 'react-native';
-import React, { useContext, useState } from 'react'
-import { AuthContext } from '../context/AuthContext';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from "react-native";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState();
@@ -10,13 +19,12 @@ export default function LoginScreen() {
 
   function RealizaLogin() {
     Login(email, senha);
-  
   }
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.inputView}>
         <TextInput
-          inputMode='email'
+          inputMode="email"
           style={styles.inputText}
           placeholder="Telefone, nome de usuário ou email"
           placeholderTextColor="#fff"
@@ -26,7 +34,7 @@ export default function LoginScreen() {
       </View>
       <View style={styles.inputView}>
         <TextInput
-          inputMode='text'
+          inputMode="text"
           secureTextEntry
           style={styles.inputText}
           placeholder="Senha"
@@ -47,7 +55,9 @@ export default function LoginScreen() {
       </TouchableOpacity>
       {error && (
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Revise os campos e tente novamente</Text>
+          <Text style={styles.errorText}>
+            Revise os campos e tente novamente
+          </Text>
         </View>
       )}
     </ScrollView>
@@ -57,52 +67,52 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#000",
+    alignItems: "center",
+    justifyContent: "center",
   },
   inputView: {
-    width: '85%',
-    backgroundColor: '#696969',
+    width: "85%",
+    backgroundColor: "#696969",
     borderRadius: 5,
     height: 60,
     marginBottom: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 20,
   },
   inputText: {
     height: 65,
-    color: '#fff',
+    color: "#fff",
   },
   loginBtn: {
-    width: '85%',
+    width: "85%",
     backgroundColor: "#32CD32",
     borderRadius: 5,
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 10,
     marginBottom: 10,
   },
   loginText: {
-    color: 'white',
+    color: "white",
   },
   forgotBtn: {
-    width: '80%',
-    alignItems: 'flex-end',
+    width: "80%",
+    alignItems: "flex-end",
     marginBottom: 30,
   },
   forgotText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 15,
     color: "#32CD32",
   },
   registerBtn: {
-    width: '80%',
-    alignItems: 'center',
+    width: "80%",
+    alignItems: "center",
   },
   registerText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 15,
   },
   img: {
@@ -113,6 +123,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   errorText: {
-    color: 'red',
+    color: "red",
   },
 });
