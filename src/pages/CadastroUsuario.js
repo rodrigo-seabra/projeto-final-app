@@ -3,14 +3,12 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   TouchableOpacity,
   ScrollView,
-  Image,
+  Modal,
   TouchableWithoutFeedback,
 } from "react-native";
-import React, { useContext, useState } from "react";
-import { Modal } from "react-native";
+import React, { useContext, useState, useEffect } from "react";
 import CustomAlert from "../components/CustomAlert";
 import { AuthContext } from "../context/AuthContext";
 
@@ -22,17 +20,23 @@ export default function CadastroUsuario() {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
-  const { cadastro, error, RealizaCadastro } = useContext(AuthContext);
+  const { RealizaCadastro, error, successCadastro, toggleScreen, cadastro } =
+    useContext(AuthContext);
 
-  if (error) {
-    setAlertVisible(true);
-    setAlertMessage("Erro ao cadastrar. Tente novamente.");
-    setAlertType("error");
-  } else if (cadastro) {
-    setAlertVisible(true);
-    setAlertMessage("Cadastro realizado com sucesso!");
-    setAlertType("success");
-  }
+  useEffect(() => {
+    if (error) {
+      setAlertVisible(true);
+      setAlertMessage("Erro ao cadastrar. Tente novamente.");
+      setAlertType("error");
+    } else if (successCadastro) {
+      setAlertVisible(true);
+      setAlertMessage("Cadastro realizado com sucesso!");
+      setAlertType("success");
+      setTimeout(() => {
+        setAlertVisible(false);
+      }, 2000);
+    }
+  }, [error, cadastro, successCadastro]);
 
   function closeAlert() {
     setAlertVisible(false);
@@ -51,8 +55,8 @@ export default function CadastroUsuario() {
             style={styles.inputText}
             placeholder="Nome de usuário"
             placeholderTextColor="#fff"
-            TextInput={username}
-            onChangeText={(digatado) => setUsername(digatado)}
+            value={username}
+            onChangeText={(digitado) => setUsername(digitado)}
           />
         </View>
         <View style={styles.inputView}>
@@ -61,8 +65,8 @@ export default function CadastroUsuario() {
             style={styles.inputText}
             placeholder="Email"
             placeholderTextColor="#fff"
-            TextInput={email}
-            onChangeText={(digatado) => setEmail(digatado)}
+            value={email}
+            onChangeText={(digitado) => setEmail(digitado)}
           />
         </View>
 
@@ -72,8 +76,8 @@ export default function CadastroUsuario() {
             style={styles.inputText}
             placeholder="Telefone"
             placeholderTextColor="#fff"
-            TextInput={phone}
-            onChangeText={(digatado) => setPhone(digatado)}
+            value={phone}
+            onChangeText={(digitado) => setPhone(digitado)}
           />
         </View>
 
@@ -84,30 +88,27 @@ export default function CadastroUsuario() {
             style={styles.inputText}
             placeholder="Senha"
             placeholderTextColor="#fff"
-            TextInput={password}
-            onChangeText={(digatado) => setPassword(digatado)}
+            value={password}
+            onChangeText={(digitado) => setPassword(digitado)}
           />
         </View>
         <TouchableOpacity style={styles.loginBtn} onPress={Cadastro}>
           <Text style={styles.loginText}>CADASTRAR</Text>
         </TouchableOpacity>
         <Modal
-          transparent={true}
           visible={alertVisible}
+          transparent
           animationType="fade"
-          onRequestClose={() => setAlertVisible(false)}
+          onRequestClose={closeAlert}
         >
           <TouchableWithoutFeedback onPress={closeAlert}>
-            <View style={styles.modalBackground}>
-              <View style={styles.modalContent}>
-                <CustomAlert
-                  message={alertMessage}
-                  type={alertType}
-                  onClose={closeAlert}
-                />
-              </View>
-            </View>
+            <View style={styles.modalOverlay} />
           </TouchableWithoutFeedback>
+          <CustomAlert
+            message={alertMessage}
+            type={alertType}
+            onClose={closeAlert}
+          />
         </Modal>
       </View>
     </ScrollView>
@@ -116,30 +117,16 @@ export default function CadastroUsuario() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#000",
-    width: "100%",
     flexGrow: 1,
-    justifyContent: "center",
+    backgroundColor: "#000",
     alignItems: "center",
+    justifyContent: "center",
   },
   section: {
+    flex: 1,
     width: "100%",
-    marginTop: 20,
-    justifyContent: "center",
     alignItems: "center",
-  },
-  inputRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "85%",
-    marginBottom: 20,
-  },
-  inputViewHalf: {
-    width: "48%", // Usamos 48% em vez de 50% para deixar um pequeno espaço entre os campos
-    backgroundColor: "#696969",
-    borderRadius: 5,
-    height: 60,
-    paddingHorizontal: 20,
+    justifyContent: "center",
   },
   inputView: {
     width: "85%",
@@ -162,30 +149,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
-    marginBottom: 100,
+    marginBottom: 10,
   },
   loginText: {
     color: "white",
-    fontWeight: "bold",
-    fontSize: 17,
-    textShadowColor: "rgba(0, 0, 0, 0.75)",
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
   },
-  img: {
-    width: "95%",
-    height: "20%",
-    marginTop: 55,
-  },
-  msgErro: {
-    fontWeight: "500",
-    fontSize: 24,
-    color: "red",
-  },
-  msgSucesso: {
-    textAlign: "center",
-    fontWeight: "600",
-    fontSize: 26,
-    color: "#32CD32",
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });

@@ -3,22 +3,44 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   TouchableOpacity,
   ScrollView,
-  Image,
+  TouchableWithoutFeedback,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import CustomAlert from "../components/CustomAlert";
+import { Modal } from "react-native";
 
-export default function LoginScreen() {
+export default function Login() {
   const [email, setEmail] = useState();
   const [senha, setSenha] = useState();
-
-  const { Login, error } = useContext(AuthContext);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
+  const { Login, error, logado, successLogin } = useContext(AuthContext);
 
   function RealizaLogin() {
     Login(email, senha);
+  }
+
+  useEffect(() => {
+    if (error) {
+      setAlertVisible(true);
+      setAlertMessage("Erro ao fazer login. Tente novamente.");
+      setAlertType("error");
+    } else if (successLogin) {
+      setAlertVisible(true);
+      setAlertMessage("Login realizado com sucesso!");
+      setAlertType("success");
+      setTimeout(() => {
+        setAlertVisible(false);
+      }, 2000);
+    }
+  }, [error, logado, Login]);
+
+  function closeAlert() {
+    setAlertVisible(false);
   }
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -49,17 +71,21 @@ export default function LoginScreen() {
       <TouchableOpacity style={styles.loginBtn} onPress={RealizaLogin}>
         <Text style={styles.loginText}>ENTRAR</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity style={styles.registerBtn}>
-        <Text style={styles.registerText}>Não tem uma conta? Cadastre-se.</Text>
-      </TouchableOpacity>
-      {error && (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>
-            Revise os campos e tente novamente
-          </Text>
-        </View>
-      )}
+      <Modal
+        visible={alertVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={closeAlert}
+      >
+        <TouchableWithoutFeedback onPress={closeAlert}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <CustomAlert
+          message={alertMessage}
+          type={alertType}
+          onClose={closeAlert}
+        />
+      </Modal>
     </ScrollView>
   );
 }
@@ -107,22 +133,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#32CD32",
   },
-  registerBtn: {
-    width: "80%",
-    alignItems: "center",
-  },
-  registerText: {
-    color: "#fff",
-    fontSize: 15,
-  },
-  img: {
-    width: "95%",
-    height: "20%",
-  },
   errorContainer: {
     marginTop: 10,
   },
   errorText: {
     color: "red",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });

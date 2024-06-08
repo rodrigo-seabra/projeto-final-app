@@ -4,8 +4,12 @@ export const AuthContext = createContext(0);
 
 function AuthProvider({ children }) {
   const [logado, setLogado] = useState(false);
+  const [successLogin, setSuccessLogin] = useState(null);
+  const [successCadastro, setSuccessCadastro] = useState(false);
+
   const [error, setError] = useState(false);
   const [cadastro, setCadastro] = useState(false);
+  const [showCadastro, setShowCadastro] = useState(false); // Estado para alternar entre as telas
 
   async function RealizaCadastro(email, username, password, phone) {
     await fetch("http://192.168.7.100:5251/api/Usuario/CreateUser", {
@@ -20,7 +24,17 @@ function AuthProvider({ children }) {
         usuarioTelefone: phone,
       }),
     })
-      .then((res) => (res.status == 200 ? setCadastro(true) : setError(true)))
+      .then((res) => {
+        if (res.status == 200) {
+          setSuccessCadastro(true);
+          setTimeout(() => {
+            setSuccessCadastro(false);
+            setShowCadastro(false);
+          }, 2000);
+        } else {
+          setError(true);
+        }
+      })
       .catch((err) => setError(true));
   }
 
@@ -35,22 +49,36 @@ function AuthProvider({ children }) {
         UsuarioSenha: senha,
       }),
     })
-      .then((res) => (res.status == 200 ? setLogado(true) : setError(true)))
+      .then((res) => {
+        if (res.status == 200) {
+          setSuccessLogin(true);
+          setTimeout(() => {
+            setLogado(true);
+            setSuccessLogin(false);
+          }, 2000);
+        } else {
+          setError(true);
+        }
+      })
       .catch((err) => setError(true));
   }
 
-  function trocarFuncao() {
-    setCadastro(true);
+  function toggleScreen() {
+    setShowCadastro(!showCadastro);
   }
+
   return (
     <AuthContext.Provider
       value={{
-        logado: logado,
+        logado,
         Login,
-        error: error,
-        cadastro: cadastro,
+        error,
+        cadastro,
         RealizaCadastro,
-        trocarFuncao,
+        showCadastro,
+        toggleScreen,
+        successCadastro,
+        successLogin,
       }}
     >
       {children}
