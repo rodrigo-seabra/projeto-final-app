@@ -1,22 +1,36 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { AuthContext } from "../context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
+import CadastroObjeto from "../pages/CadastroObjeto";
 import CriarObservacao from "../pages/CriarObservacao";
 import Home from "../pages/Home";
 import AuthScreen from "../pages/AuthScreen";
 
 export default function Rotas() {
   const { logado, cadastro } = useContext(AuthContext);
+  const [usuarioSalvoNoAsyncS, setUsuarioSalvoNoAsyncS] = useState(false);
+
+  useEffect(() => {
+    const verificarUsuarioAsyncStorage = async () => {
+      const userId = await AsyncStorage.getItem("userId");
+      console.log(userId);
+      if (userId !== null) {
+        setUsuarioSalvoNoAsyncS(true);
+      }
+    };
+    verificarUsuarioAsyncStorage();
+  }, []);
 
   return (
     <NavigationContainer>
-      {logado ? (
+      {logado || usuarioSalvoNoAsyncS ? (
         <Tab.Navigator
           screenOptions={{
             headerShown: false,
@@ -41,8 +55,8 @@ export default function Rotas() {
             }}
           />
           <Tab.Screen
-            name="CriarObservacao"
-            component={CriarObservacao}
+            name="Cadastrar objeto desaparecido"
+            component={CadastroObjeto}
             options={{
               tabBarLabel: "Obs",
               tabBarIcon: ({ color, size }) => (

@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const AuthContext = createContext(0);
 
@@ -49,8 +50,18 @@ function AuthProvider({ children }) {
         UsuarioSenha: senha,
       }),
     })
-      .then((res) => {
-        if (res.status == 200) {
+      .then((res) => res.json())
+      .then(async (json) => {
+        if (json.success) {
+          try {
+            await AsyncStorage.setItem(
+              "userId",
+              json.user.usuarioId.toString()
+            );
+          } catch (err) {
+            setError(true);
+          }
+          console.log("CHEGOU");
           setSuccessLogin(true);
           setTimeout(() => {
             setLogado(true);
