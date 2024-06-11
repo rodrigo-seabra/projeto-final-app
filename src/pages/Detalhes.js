@@ -37,7 +37,11 @@ export default function Detalhes({ objeto, setOnDetails, onNovaObs }) {
   }, []);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#32CD32" />;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#32CD32" />
+      </View>
+    );
   }
 
   return (
@@ -102,5 +106,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
-  
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+  },
 });
