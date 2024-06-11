@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -44,6 +45,7 @@ export default function Login() {
   }
   return (
     <ScrollView contentContainerStyle={styles.container}>
+        <Image source={require("../../assets/LogoAPP.png")} style={styles.img} />
       <View style={styles.inputView}>
         <TextInput
           inputMode="email"
@@ -142,5 +144,10 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  img: {
+    width: "95%",
+    height: "20%",
+    marginTop: 55,
   },
 });

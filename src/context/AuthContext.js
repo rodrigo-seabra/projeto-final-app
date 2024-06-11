@@ -10,7 +10,7 @@ function AuthProvider({ children }) {
 
   const [error, setError] = useState(false);
   const [cadastro, setCadastro] = useState(false);
-  const [showCadastro, setShowCadastro] = useState(false); // Estado para alternar entre as telas
+  const [showCadastro, setShowCadastro] = useState(false); 
 
   async function RealizaCadastro(email, username, password, phone) {
     await fetch("http://10.139.75.37:5251/api/Usuario/CreateUser", {

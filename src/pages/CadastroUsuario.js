@@ -7,6 +7,7 @@ import {
   ScrollView,
   Modal,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import React, { useContext, useState, useEffect } from "react";
 import CustomAlert from "../components/CustomAlert";
@@ -48,6 +49,8 @@ export default function CadastroUsuario() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+        <Image source={require("../../assets/LogoAPP.png")} style={styles.img} />
+        <Text style={styles.title}>Cadastre-se</Text>
       <View style={styles.section}>
         <View style={styles.inputView}>
           <TextInput
@@ -118,15 +121,15 @@ export default function CadastroUsuario() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+    padding: 15,
+    paddingVertical: 100,
   },
   section: {
-    flex: 1,
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
   },
   inputView: {
     width: "85%",
@@ -158,4 +161,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
+  img: {
+    width: "95%",
+    height: "20%",
+    marginTop: 25,
+  },
+  title:{
+    fontSize: 50,
+    fontWeight: "bold",
+    color: "white"
+  }
 });
