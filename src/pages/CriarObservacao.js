@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   View,
@@ -9,17 +9,28 @@ import {
   StyleSheet,
   Modal,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import SelectDate from "../components/SelectDate"; 
 
-import SelectDate from "../components/SelectDate"; // Certifique-se de que o nome do componente exportado corresponde
-
-export default function CriarObservacao({ backToHome, usuarioId, objetoId }) {
+export default function CriarObservacao({ backToHome, objetoId }) {
   const [observacoesDescricao, setObservacoesDescricao] = useState("");
   const [observacoesData, setObservacoesData] = useState(new Date());
   const [sucesso, setSucesso] = useState(false);
   const [erro, setErro] = useState(false);
+  const [usuarioId, setUsuarioId] = useState();
+
+  useEffect(() => {
+    const verificarUsuarioAsyncStorage = async () => {
+      const userId = await AsyncStorage.getItem("userId");
+      if (userId !== null) {
+        setUsuarioId(userId);
+      }
+    };
+    verificarUsuarioAsyncStorage();
+  }, []);
 
   async function postObservacao() {
-    await fetch("http://192.168.7.100:5251/api/Observacoes/CreateObservacao", {
+    await fetch("http://10.139.75.37:5251/api/Observacoes/CreateObservacao", {
       method: "POST",
       headers: {
         "content-type": "application/json",

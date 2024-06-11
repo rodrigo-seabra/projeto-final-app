@@ -13,7 +13,7 @@ function AuthProvider({ children }) {
   const [showCadastro, setShowCadastro] = useState(false); // Estado para alternar entre as telas
 
   async function RealizaCadastro(email, username, password, phone) {
-    await fetch("http://192.168.7.100:5251/api/Usuario/CreateUser", {
+    await fetch("http://10.139.75.37:5251/api/Usuario/CreateUser", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -40,7 +40,7 @@ function AuthProvider({ children }) {
   }
 
   async function Login(email, senha) {
-    await fetch("http://192.168.7.100:5251/api/Usuario/Login", {
+    await fetch("http://10.139.75.37:5251/api/Usuario/Login", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -61,7 +61,6 @@ function AuthProvider({ children }) {
           } catch (err) {
             setError(true);
           }
-          console.log("CHEGOU");
           setSuccessLogin(true);
           setTimeout(() => {
             setLogado(true);

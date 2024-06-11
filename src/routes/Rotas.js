@@ -20,7 +20,6 @@ export default function Rotas() {
   useEffect(() => {
     const verificarUsuarioAsyncStorage = async () => {
       const userId = await AsyncStorage.getItem("userId");
-      console.log(userId);
       if (userId !== null) {
         setUsuarioSalvoNoAsyncS(true);
       }

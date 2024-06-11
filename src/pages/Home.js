@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   Animated,
+  StatusBar,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import Objeto from "../components/Objeto";
@@ -35,7 +36,7 @@ export default function Home() {
   const [error, setError] = useState(false);
 
   async function getObjetos() {
-    await fetch("http://192.168.7.100:5251/api/Objeto/GetAllMissingObj", {
+    await fetch("http://10.139.75.37:5251/api/Objeto/GetAllMissingObj", {
       method: "GET",
       headers: { "content-type": "application/json" },
     })
@@ -88,8 +89,11 @@ export default function Home() {
   }
   return (
     <View style={styles.container}>
+      <StatusBar/>
       <Animated.View style={{ height: "100%", width: "100%", opacity: fade }}>
-        <Text style={styles.title}>Objeto</Text>
+      <Image source={require("../../assets/LogoAPP.png")} style={styles.img} />
+
+        <Text style={styles.title}>Objetos desaparecidos</Text>
         {objetos.length > 0 ? (
           <FlatList
             data={objetos}
