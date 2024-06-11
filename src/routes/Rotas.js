@@ -9,9 +9,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Tab = createBottomTabNavigator();
 
 import CadastroObjeto from "../pages/CadastroObjeto";
-import CriarObservacao from "../pages/CriarObservacao";
 import Home from "../pages/Home";
 import AuthScreen from "../pages/AuthScreen";
+import Busca from "../pages/Busca";
 
 export default function Rotas() {
   const { logado, cadastro } = useContext(AuthContext);
@@ -64,6 +64,16 @@ export default function Rotas() {
                   color={color}
                   size={40}
                 />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Buscar pessoa"
+            component={Busca}
+            options={{
+              tabBarLabel: "Busca",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="card-search-outline" color={color} size={40} />
               ),
             }}
           />
