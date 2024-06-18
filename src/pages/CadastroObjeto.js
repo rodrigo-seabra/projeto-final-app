@@ -8,11 +8,13 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Image,
+  Animated,
 } from "react-native";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import CustomAlert from "../components/CustomAlert";
 import SelectDate from "../components/SelectDate";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function CadastroObjeto() {
   const [alertVisible, setAlertVisible] = useState(false);
@@ -24,10 +26,21 @@ export default function CadastroObjeto() {
   const [objetoLocalDesaparecimento, setObjetoLocalDesaparecimento] = useState("");
   const [objetoFoto, setObjetoFoto] = useState("");
   const [objetoDtDesaparecimento, setObjetoDtDesaparecimento] = useState(new Date());
-  const [objetoStatus, setObjetoStatus] = useState();
   const [erro, setErro] = useState(false);
-
+  const fade = useRef(new Animated.Value(0)).current;
   const [usuarioId, setUsuarioId] = useState();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fade.setValue(0);
+      Animated.timing(fade, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+    }, [])
+  );
+
 
   useEffect(() => {
     const verificarUsuarioAsyncStorage = async () => {
@@ -53,7 +66,7 @@ export default function CadastroObjeto() {
         objetoNome: objetoNome,
         objetoCor: objetoCor,
         objetoFoto: objetoFoto,
-        objetoStatus: objetoStatus,
+        objetoStatus: 1,
         objetoObservacao: objetoObservacao,
         objetoLocalDesaparecimento: objetoLocalDesaparecimento,
         objetoDtDesaparecimento: objetoDtDesaparecimento.toISOString(),
@@ -64,8 +77,8 @@ export default function CadastroObjeto() {
         if (res.status == 200) {
           setObjetoCor("");
           setObjetoFoto("");
+          setObjetoObservacao("")
           setObjetoNome("");
-          setObjetoStatus("");
           setObjetoDtDesaparecimento(new Date());
           setObjetoLocalDesaparecimento("");
           setAlertVisible(true);
@@ -80,6 +93,8 @@ export default function CadastroObjeto() {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+            <Animated.View style={{ height: "100%", width: "100%", opacity: fade }}>
+
       <View style={styles.container}>
         <Image source={require("../../assets/LogoAPP.png")} style={styles.img} />
         <View style={styles.inputView}>
@@ -102,16 +117,7 @@ export default function CadastroObjeto() {
             onChangeText={(digitado) => setObjetoCor(digitado)}
           />
         </View>
-        <View style={styles.inputView}>
-          <TextInput
-            inputMode="numeric"
-            style={styles.inputText}
-            placeholder="status"
-            placeholderTextColor="#fff"
-            value={objetoStatus}
-            onChangeText={(digitado) => setObjetoStatus(digitado)}
-          />
-        </View>
+
         <View style={styles.inputView}>
           <TextInput
             inputMode="text"
@@ -170,6 +176,7 @@ export default function CadastroObjeto() {
           />
         </Modal>
       </View>
+      </Animated.View>
     </ScrollView>
   );
 }
@@ -181,7 +188,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#000',
     padding: 15,
-    paddingVertical: 100,
+    paddingVertical: 65,
+    paddingBottom: 200,
   },
   container: {
     width: '100%',

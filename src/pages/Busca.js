@@ -12,10 +12,7 @@ export default function Busca() {
   const [busca, setBusca] = useState('')
   const [error, setError] = useState(false)
   const [filtro, setFiltro] = useState()
-  const [idUser, setIdUser] = useState();
-  const [userNome, setUserNome] = useState();
-  const [userEmail, setUserEmail] = useState();
-  const [userSenha, setUserSenha] = useState();
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -43,7 +40,6 @@ export default function Busca() {
   }, [])
   useEffect(() => {
     setFiltro(usuarios.filter((item) => item.usuarioNome == busca)[0])
-    console.log(filtro)
   }, [busca])
 
   return (

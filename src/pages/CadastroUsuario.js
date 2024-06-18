@@ -21,8 +21,12 @@ export default function CadastroUsuario() {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
-  const { RealizaCadastro, error, successCadastro, toggleScreen, cadastro } =
+  const { RealizaCadastro, error, successCadastro, resetError, cadastro } =
     useContext(AuthContext);
+
+  useEffect(() => {
+    resetError();
+  }, [])
 
   useEffect(() => {
     if (error) {
@@ -49,8 +53,8 @@ export default function CadastroUsuario() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-        <Image source={require("../../assets/LogoAPP.png")} style={styles.img} />
-        <Text style={styles.title}>Cadastre-se</Text>
+      <Image source={require("../../assets/LogoAPP.png")} style={styles.img} />
+      <Text style={styles.title}>Cadastre-se</Text>
       <View style={styles.section}>
         <View style={styles.inputView}>
           <TextInput
@@ -166,9 +170,10 @@ const styles = StyleSheet.create({
     height: "20%",
     marginTop: 25,
   },
-  title:{
-    fontSize: 50,
-    fontWeight: "bold",
+  title: {
+    margin: 10,
+    fontSize: 40,
+    fontWeight: "500",
     color: "white"
   }
 });

@@ -19,11 +19,15 @@ export default function Login() {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
-  const { Login, error, logado, successLogin } = useContext(AuthContext);
+  const { Login, error, logado, successLogin, resetError } = useContext(AuthContext);
 
   function RealizaLogin() {
     Login(email, senha);
   }
+
+  useEffect(()=> {
+    resetError();
+  }, [])
 
   useEffect(() => {
     if (error) {
@@ -50,7 +54,7 @@ export default function Login() {
         <TextInput
           inputMode="email"
           style={styles.inputText}
-          placeholder="Telefone, nome de usuário ou email"
+          placeholder="Email do usuário"
           placeholderTextColor="#fff"
           value={email}
           onChangeText={(digitado) => setEmail(digitado)}
@@ -95,9 +99,10 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+    padding: 15,
   },
   inputView: {
     width: "85%",
@@ -148,6 +153,5 @@ const styles = StyleSheet.create({
   img: {
     width: "95%",
     height: "20%",
-    marginTop: 55,
   },
 });

@@ -27,6 +27,7 @@ function AuthProvider({ children }) {
     })
       .then((res) => {
         if (res.status == 200) {
+          setError(false);
           setSuccessCadastro(true);
           setTimeout(() => {
             setSuccessCadastro(false);
@@ -61,6 +62,7 @@ function AuthProvider({ children }) {
           } catch (err) {
             setError(true);
           }
+          setError(false)
           setSuccessLogin(true);
           setTimeout(() => {
             setLogado(true);
@@ -74,7 +76,12 @@ function AuthProvider({ children }) {
   }
 
   function toggleScreen() {
+    setError(false)
     setShowCadastro(!showCadastro);
+  }
+
+  function resetError() {
+    setError(false);
   }
 
   return (
@@ -82,6 +89,7 @@ function AuthProvider({ children }) {
       value={{
         logado,
         Login,
+        resetError,
         error,
         cadastro,
         RealizaCadastro,

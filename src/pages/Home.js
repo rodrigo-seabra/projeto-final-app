@@ -29,6 +29,7 @@ export default function Home() {
         duration: 1000,
         useNativeDriver: true,
       }).start();
+      getObjetos();
     }, [])
   );
 
