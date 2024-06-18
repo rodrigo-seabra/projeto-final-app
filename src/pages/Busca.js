@@ -27,7 +27,7 @@ export default function Busca() {
 
 
   async function getUsuarios() {
-    await fetch('http://10.139.75.37:5251/api/Usuario/GetAllUsers', {
+    await fetch('http://10.139.75.37:5251/api/Objeto/GetAllObjetos', {
       method: 'GET',
       headers: { 'content-type': 'application/json' }
     })
@@ -39,7 +39,7 @@ export default function Busca() {
     getUsuarios()
   }, [])
   useEffect(() => {
-    setFiltro(usuarios.filter((item) => item.usuarioNome == busca)[0])
+    setFiltro(usuarios.filter((item) => item.objetoNome == busca)[0])
   }, [busca])
 
   return (
@@ -59,22 +59,22 @@ export default function Busca() {
           </TouchableOpacity>
         </View>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>Usuário</Text>
+          <Text style={styles.title}>Objeto</Text>
         </View>
         {busca !== '' && !filtro && (
           <ActivityIndicator style={{ marginTop: 20 }} size="large" color="#00ff00" />
         )}
         {filtro && busca !== '' && (
           <View style={styles.card}>
-            <FontAwesome name="user" size={54} color="white" style={styles.icon} />
-            <Text style={styles.userName}>{filtro.usuarioNome}</Text>
+        <Image source={{ uri: filtro.objetoFoto  }} style={styles.image} />
+        <Text style={styles.userName}>{filtro.objetoNome}</Text>
             <View style={styles.userInfoContainer}>
               <FontAwesome name="phone" size={18} color="white" style={styles.icon} />
-              <Text style={styles.userInfo}>{`Telefone: ${filtro.usuarioTelefone}`}</Text>
+              <Text style={styles.userInfo}>{`Observação: ${filtro.objetoObservacao}`}</Text>
             </View>
             <View style={styles.userInfoContainer}>
               <FontAwesome name="map-marker" size={18} color="white" style={styles.icon} />
-              <Text style={styles.userInfo}>{`Email: ${filtro.usuarioEmail}`}</Text>
+              <Text style={styles.userInfo}>{`Local: ${filtro.objetoLocalDesaparecimento}`}</Text>
             </View>
           </View>
         )}
@@ -93,6 +93,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: 10,
+  },
+  image: {
+    width: '100%',
+    height: 150,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+    overflow: 'hidden',
   },
   searchContainer: {
     marginTop: 15,
