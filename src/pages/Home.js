@@ -41,7 +41,7 @@ export default function Home() {
       method: "GET",
       headers: { "content-type": "application/json" },
     })
-      .then((res) => (res.ok == true ? res.json() : false))
+      .then((res) => (res.status == 200 ? res.json() : false))
       .then((json) => setObjetos(json))
       .catch((err) => setError(true));
   }

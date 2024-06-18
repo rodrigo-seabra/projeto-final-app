@@ -1,17 +1,18 @@
 import { createContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 export const AuthContext = createContext(0);
 
 function AuthProvider({ children }) {
   const [logado, setLogado] = useState(false);
   const [successLogin, setSuccessLogin] = useState(null);
   const [successCadastro, setSuccessCadastro] = useState(false);
-
+  const [userInfos, setUserInfos] = useState([]);
   const [error, setError] = useState(false);
+  const [realizouLogout, setRealizouLogout] = useState(false);
   const [cadastro, setCadastro] = useState(false);
-  const [showCadastro, setShowCadastro] = useState(false); 
 
+  const [showCadastro, setShowCadastro] = useState(false); 
+  
   async function RealizaCadastro(email, username, password, phone) {
     await fetch("http://10.139.75.37:5251/api/Usuario/CreateUser", {
       method: "POST",
@@ -66,6 +67,7 @@ function AuthProvider({ children }) {
           setSuccessLogin(true);
           setTimeout(() => {
             setLogado(true);
+            setRealizouLogout(false);
             setSuccessLogin(false);
           }, 2000);
         } else {
@@ -75,6 +77,34 @@ function AuthProvider({ children }) {
       .catch((err) => setError(true));
   }
 
+  async function getUserDetails(){
+    const userId = await AsyncStorage.getItem("userId");
+    await fetch ( "http://10.139.75.37:5251/api/Usuario/GetUserId/" + userId, {
+      method: "GET",
+      headers: { "content-type": "application/json" },
+    })
+    .then((res) => res.json())
+      .then((json) => {
+        setUserInfos(json)
+      })
+      .catch((err) => setError(true));
+  }
+
+  async function Logout()
+  {
+    removeUserFromStorage();
+    setLogado(false);
+    setRealizouLogout(true)
+  }
+
+  const removeUserFromStorage = async () => {
+    try {
+      await AsyncStorage.removeItem('userId');
+      console.log('Usuário removido do AsyncStorage');
+    } catch (e) {
+      console.error('Erro ao remover usuário do AsyncStorage:', e);
+    }
+  };
   function toggleScreen() {
     setError(false)
     setShowCadastro(!showCadastro);
@@ -97,6 +127,10 @@ function AuthProvider({ children }) {
         toggleScreen,
         successCadastro,
         successLogin,
+        userInfos,
+        getUserDetails,
+        Logout,
+        realizouLogout,
       }}
     >
       {children}

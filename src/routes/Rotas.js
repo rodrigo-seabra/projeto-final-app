@@ -12,20 +12,32 @@ import CadastroObjeto from "../pages/CadastroObjeto";
 import Home from "../pages/Home";
 import AuthScreen from "../pages/AuthScreen";
 import Busca from "../pages/Busca";
+import User from "../pages/User";
 
 export default function Rotas() {
-  const { logado, cadastro } = useContext(AuthContext);
+  const { logado, cadastro, realizouLogout } = useContext(AuthContext);
   const [usuarioSalvoNoAsyncS, setUsuarioSalvoNoAsyncS] = useState(false);
 
+  const verificarUsuarioAsyncStorage = async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    if (userId !== null) {
+      setUsuarioSalvoNoAsyncS(true);
+    }
+  };
   useEffect(() => {
-    const verificarUsuarioAsyncStorage = async () => {
-      const userId = await AsyncStorage.getItem("userId");
-      if (userId !== null) {
-        setUsuarioSalvoNoAsyncS(true);
-      }
-    };
     verificarUsuarioAsyncStorage();
   }, []);
+
+  useEffect(() => {
+    verificarUsuarioAsyncStorage();
+  }, [logado])
+
+  if(realizouLogout)
+    {
+      return(
+        <AuthScreen/>
+      )
+    }
 
   return (
     <NavigationContainer>
@@ -74,6 +86,16 @@ export default function Rotas() {
               tabBarLabel: "Busca",
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name="card-search-outline" color={color} size={40} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="User"
+            component={User}
+            options={{
+              tabBarLabel: "User",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="account-cog-outline" color={color} size={40} />
               ),
             }}
           />
