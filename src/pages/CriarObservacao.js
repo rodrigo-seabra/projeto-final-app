@@ -13,6 +13,7 @@ import CustomAlert from "../components/CustomAlert";
 
 export default function CriarObservacao({ backToHome, objetoId }) {
   const [observacoesDescricao, setObservacoesDescricao] = useState("");
+  const [observacoesLocal, setObservacoesLocal] = useState("");
   const [observacoesData, setObservacoesData] = useState(new Date());
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -38,6 +39,7 @@ export default function CriarObservacao({ backToHome, objetoId }) {
       body: JSON.stringify({
         observacoesDescricao: observacoesDescricao,
         observacoesData: observacoesData.toISOString(),
+        observacaoLocal: observacoesLocal,
         usuarioId: usuarioId,
         objetoId: objetoId,
       }),
@@ -78,6 +80,16 @@ export default function CriarObservacao({ backToHome, objetoId }) {
           placeholderTextColor="#fff"
           value={observacoesDescricao}
           onChangeText={(text) => setObservacoesDescricao(text)}
+        />
+
+      </View>
+      <View style={styles.inputView}>
+      <TextInput
+          style={styles.inputText}
+          placeholder="Local da observação"
+          placeholderTextColor="#fff"
+          value={observacoesLocal}
+          onChangeText={(text) => setObservacoesLocal(text)}
         />
       </View>
       <SelectDate

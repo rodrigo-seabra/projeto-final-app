@@ -54,6 +54,7 @@ export default function Detalhes({ objeto, setOnDetails, onNovaObs }) {
         observacoes.map((obs, index) => (
           <View key={index} style={styles.observacaoCard}>
             <Text style={styles.observacaoText}>{obs.observacoesDescricao}</Text>
+            <Text style={styles.observacaoLocal}>Local: {obs.observacaoLocal}</Text>
             <Text style={styles.observacaoDate}>{new Date(obs.observacoesData).toLocaleDateString()}</Text>
           </View>
         ))
@@ -86,6 +87,11 @@ const styles = StyleSheet.create({
   observacaoText: {
     color: '#fff',
     fontSize: 16,
+  },
+  observacaoLocal: {
+    color: '#fff',
+    marginVertical: 2,
+    fontSize: 15,
   },
   observacaoDate: {
     color: '#bbb',
