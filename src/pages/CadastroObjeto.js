@@ -23,9 +23,12 @@ export default function CadastroObjeto() {
   const [objetoNome, setObjetoNome] = useState("");
   const [objetoCor, setObjetoCor] = useState("");
   const [objetoObservacao, setObjetoObservacao] = useState("");
-  const [objetoLocalDesaparecimento, setObjetoLocalDesaparecimento] = useState("");
+  const [objetoLocalDesaparecimento, setObjetoLocalDesaparecimento] =
+    useState("");
   const [objetoFoto, setObjetoFoto] = useState("");
-  const [objetoDtDesaparecimento, setObjetoDtDesaparecimento] = useState(new Date());
+  const [objetoDtDesaparecimento, setObjetoDtDesaparecimento] = useState(
+    new Date()
+  );
   const [erro, setErro] = useState(false);
   const fade = useRef(new Animated.Value(0)).current;
   const [usuarioId, setUsuarioId] = useState();
@@ -40,7 +43,6 @@ export default function CadastroObjeto() {
       }).start();
     }, [])
   );
-
 
   useEffect(() => {
     const verificarUsuarioAsyncStorage = async () => {
@@ -57,7 +59,7 @@ export default function CadastroObjeto() {
   }
 
   async function CadastroObj() {
-    await fetch("http://10.139.75.37:5251/api/Objeto/CreateObjeto", {
+    await fetch("http://192.168.7.109:5251/api/Objeto/CreateObjeto", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -77,7 +79,7 @@ export default function CadastroObjeto() {
         if (res.status == 200) {
           setObjetoCor("");
           setObjetoFoto("");
-          setObjetoObservacao("")
+          setObjetoObservacao("");
           setObjetoNome("");
           setObjetoDtDesaparecimento(new Date());
           setObjetoLocalDesaparecimento("");
@@ -93,89 +95,95 @@ export default function CadastroObjeto() {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-            <Animated.View style={{ height: "100%", width: "100%", opacity: fade }}>
+      <Animated.View style={{ height: "100%", width: "100%", opacity: fade }}>
+        <View style={styles.container}>
+          <Image
+            source={require("../../assets/LogoAPP.png")}
+            style={styles.img}
+          />
+          <View style={styles.inputView}>
+            <TextInput
+              inputMode="text"
+              style={styles.inputText}
+              placeholder="Nome do objeto"
+              placeholderTextColor="#fff"
+              value={objetoNome}
+              onChangeText={(digitado) => setObjetoNome(digitado)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              inputMode="text"
+              style={styles.inputText}
+              placeholder="cor do objeto"
+              placeholderTextColor="#fff"
+              value={objetoCor}
+              onChangeText={(digitado) => setObjetoCor(digitado)}
+            />
+          </View>
 
-      <View style={styles.container}>
-        <Image source={require("../../assets/LogoAPP.png")} style={styles.img} />
-        <View style={styles.inputView}>
-          <TextInput
-            inputMode="text"
-            style={styles.inputText}
-            placeholder="Nome do objeto"
-            placeholderTextColor="#fff"
-            value={objetoNome}
-            onChangeText={(digitado) => setObjetoNome(digitado)}
-          />
+          <View style={styles.inputView}>
+            <TextInput
+              inputMode="text"
+              style={styles.inputText}
+              placeholder="Observação"
+              placeholderTextColor="#fff"
+              value={objetoObservacao}
+              onChangeText={(digitado) => setObjetoObservacao(digitado)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              inputMode="text"
+              style={styles.inputText}
+              placeholder="Local de desaparecimento"
+              placeholderTextColor="#fff"
+              value={objetoLocalDesaparecimento}
+              onChangeText={(digitado) =>
+                setObjetoLocalDesaparecimento(digitado)
+              }
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              inputMode="text"
+              style={styles.inputText}
+              placeholder="Foto do objeto"
+              placeholderTextColor="#fff"
+              value={objetoFoto}
+              onChangeText={(digitado) => setObjetoFoto(digitado)}
+            />
+          </View>
+          <View>
+            <Text style={styles.textDt}>Data de desaparecimento</Text>
+            <SelectDate
+              date={objetoDtDesaparecimento}
+              onChange={(event, selectedDate) =>
+                setObjetoDtDesaparecimento(
+                  selectedDate || objetoDtDesaparecimento
+                )
+              }
+            />
+          </View>
+          <TouchableOpacity style={styles.loginBtn} onPress={CadastroObj}>
+            <Text style={styles.loginText}>CADASTRAR</Text>
+          </TouchableOpacity>
+          <Modal
+            visible={alertVisible}
+            transparent
+            animationType="fade"
+            onRequestClose={closeAlert}
+          >
+            <TouchableWithoutFeedback onPress={closeAlert}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
+            <CustomAlert
+              message={alertMessage}
+              type={alertType}
+              onClose={closeAlert}
+            />
+          </Modal>
         </View>
-        <View style={styles.inputView}>
-          <TextInput
-            inputMode="text"
-            style={styles.inputText}
-            placeholder="cor do objeto"
-            placeholderTextColor="#fff"
-            value={objetoCor}
-            onChangeText={(digitado) => setObjetoCor(digitado)}
-          />
-        </View>
-
-        <View style={styles.inputView}>
-          <TextInput
-            inputMode="text"
-            style={styles.inputText}
-            placeholder="Observação"
-            placeholderTextColor="#fff"
-            value={objetoObservacao}
-            onChangeText={(digitado) => setObjetoObservacao(digitado)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            inputMode="text"
-            style={styles.inputText}
-            placeholder="Local de desaparecimento"
-            placeholderTextColor="#fff"
-            value={objetoLocalDesaparecimento}
-            onChangeText={(digitado) => setObjetoLocalDesaparecimento(digitado)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            inputMode="text"
-            style={styles.inputText}
-            placeholder="Foto do objeto"
-            placeholderTextColor="#fff"
-            value={objetoFoto}
-            onChangeText={(digitado) => setObjetoFoto(digitado)}
-          />
-        </View>
-        <View>
-          <Text style={styles.textDt}>Data de desaparecimento</Text>
-          <SelectDate
-            date={objetoDtDesaparecimento}
-            onChange={(event, selectedDate) =>
-              setObjetoDtDesaparecimento(selectedDate || objetoDtDesaparecimento)
-            }
-          />
-        </View>
-        <TouchableOpacity style={styles.loginBtn} onPress={CadastroObj}>
-          <Text style={styles.loginText}>CADASTRAR</Text>
-        </TouchableOpacity>
-        <Modal
-          visible={alertVisible}
-          transparent
-          animationType="fade"
-          onRequestClose={closeAlert}
-        >
-          <TouchableWithoutFeedback onPress={closeAlert}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
-          <CustomAlert
-            message={alertMessage}
-            type={alertType}
-            onClose={closeAlert}
-          />
-        </Modal>
-      </View>
       </Animated.View>
     </ScrollView>
   );
@@ -184,16 +192,16 @@ export default function CadastroObjeto() {
 const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#000",
     padding: 15,
     paddingVertical: 65,
     paddingBottom: 200,
   },
   container: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   section: {
     flex: 1,
@@ -215,7 +223,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   textDt: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 20,
     height: 35,
     color: "#fff",

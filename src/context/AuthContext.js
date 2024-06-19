@@ -11,10 +11,10 @@ function AuthProvider({ children }) {
   const [realizouLogout, setRealizouLogout] = useState(false);
   const [cadastro, setCadastro] = useState(false);
 
-  const [showCadastro, setShowCadastro] = useState(false); 
-  
+  const [showCadastro, setShowCadastro] = useState(false);
+
   async function RealizaCadastro(email, username, password, phone) {
-    await fetch("http://10.139.75.37:5251/api/Usuario/CreateUser", {
+    await fetch("http://192.168.7.109:5251/api/Usuario/CreateUser", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -42,7 +42,7 @@ function AuthProvider({ children }) {
   }
 
   async function Login(email, senha) {
-    await fetch("http://10.139.75.37:5251/api/Usuario/Login", {
+    await fetch("http://192.168.7.109:5251/api/Usuario/Login", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -63,7 +63,7 @@ function AuthProvider({ children }) {
           } catch (err) {
             setError(true);
           }
-          setError(false)
+          setError(false);
           setSuccessLogin(true);
           setTimeout(() => {
             setLogado(true);
@@ -77,36 +77,35 @@ function AuthProvider({ children }) {
       .catch((err) => setError(true));
   }
 
-  async function getUserDetails(){
+  async function getUserDetails() {
     const userId = await AsyncStorage.getItem("userId");
-    await fetch ( "http://10.139.75.37:5251/api/Usuario/GetUserId/" + userId, {
+    await fetch("http://192.168.7.109:5251/api/Usuario/GetUserId/" + userId, {
       method: "GET",
       headers: { "content-type": "application/json" },
     })
-    .then((res) => res.json())
+      .then((res) => res.json())
       .then((json) => {
-        setUserInfos(json)
+        setUserInfos(json);
       })
       .catch((err) => setError(true));
   }
 
-  async function Logout()
-  {
+  async function Logout() {
     removeUserFromStorage();
     setLogado(false);
-    setRealizouLogout(true)
+    setRealizouLogout(true);
   }
 
   const removeUserFromStorage = async () => {
     try {
-      await AsyncStorage.removeItem('userId');
-      console.log('Usuário removido do AsyncStorage');
+      await AsyncStorage.removeItem("userId");
+      console.log("Usuário removido do AsyncStorage");
     } catch (e) {
-      console.error('Erro ao remover usuário do AsyncStorage:', e);
+      console.error("Erro ao remover usuário do AsyncStorage:", e);
     }
   };
   function toggleScreen() {
-    setError(false)
+    setError(false);
     setShowCadastro(!showCadastro);
   }
 

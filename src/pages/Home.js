@@ -37,7 +37,7 @@ export default function Home() {
   const [error, setError] = useState(false);
 
   async function getObjetos() {
-    await fetch("http://10.139.75.37:5251/api/Objeto/GetAllMissingObj", {
+    await fetch("http://192.168.7.109:5251/api/Objeto/GetAllMissingObj", {
       method: "GET",
       headers: { "content-type": "application/json" },
     })
@@ -90,9 +90,12 @@ export default function Home() {
   }
   return (
     <View style={styles.container}>
-      <StatusBar/>
+      <StatusBar />
       <Animated.View style={{ height: "100%", width: "100%", opacity: fade }}>
-      <Image source={require("../../assets/LogoAPP.png")} style={styles.img} />
+        <Image
+          source={require("../../assets/LogoAPP.png")}
+          style={styles.img}
+        />
 
         <Text style={styles.title}>Objetos desaparecidos</Text>
         {objetos.length > 0 ? (

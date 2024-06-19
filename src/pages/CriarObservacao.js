@@ -31,7 +31,7 @@ export default function CriarObservacao({ backToHome, objetoId }) {
   }, []);
 
   async function postObservacao() {
-    await fetch("http://10.139.75.37:5251/api/Observacoes/CreateObservacao", {
+    await fetch("http://192.168.7.109:5251/api/Observacoes/CreateObservacao", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -44,24 +44,24 @@ export default function CriarObservacao({ backToHome, objetoId }) {
         objetoId: objetoId,
       }),
     })
-    .then((res) => {
-      if (res.status == 200) {
+      .then((res) => {
+        if (res.status == 200) {
+          setAlertVisible(true);
+          setAlertMessage("Observação cadastrada com sucesso!");
+          setAlertType("success");
+          setObservacoesDescricao("");
+          setObservacoesData(new Date());
+        } else {
+          throw new Error("Failed to create observation");
+        }
+      })
+      .catch((err) => {
         setAlertVisible(true);
-        setAlertMessage("Observação cadastrada com sucesso!");
-        setAlertType("success");
-        setObservacoesDescricao("");
-        setObservacoesData(new Date());
-      } else {
-        throw new Error("Failed to create observation");
-      }
-    })
-    .catch((err) => {
-      setAlertVisible(true);
-      setAlertMessage(
-        "Erro ao cadastrar observação. Revise os campos e tente novamente."
-      );
-      setAlertType("error");
-    });
+        setAlertMessage(
+          "Erro ao cadastrar observação. Revise os campos e tente novamente."
+        );
+        setAlertType("error");
+      });
   }
 
   function closeAlert() {
@@ -81,10 +81,9 @@ export default function CriarObservacao({ backToHome, objetoId }) {
           value={observacoesDescricao}
           onChangeText={(text) => setObservacoesDescricao(text)}
         />
-
       </View>
       <View style={styles.inputView}>
-      <TextInput
+        <TextInput
           style={styles.inputText}
           placeholder="Local da observação"
           placeholderTextColor="#fff"
@@ -101,13 +100,14 @@ export default function CriarObservacao({ backToHome, objetoId }) {
       <TouchableOpacity style={styles.loginBtn} onPress={postObservacao}>
         <Text style={styles.loginText}>Cadastrar Observação</Text>
       </TouchableOpacity>
-      {alertVisible && (      <CustomAlert
-        visible={alertVisible}
-        message={alertMessage}
-        type={alertType}
-        onClose={closeAlert}
-      />)}
-
+      {alertVisible && (
+        <CustomAlert
+          visible={alertVisible}
+          message={alertMessage}
+          type={alertType}
+          onClose={closeAlert}
+        />
+      )}
     </ScrollView>
   );
 }
