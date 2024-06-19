@@ -8,52 +8,52 @@ import {
   FlatList,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
-import Icon from "react-native-vector-icons/FontAwesome"; // Importe o ícone que deseja usar
 import Objeto from "../components/Objeto";
 import { ActivityIndicator } from "react-native";
 import Detalhes from "./Detalhes";
 import CriarObservacao from "./CriarObservacao";
 import DetalhesUsuario from "./DetalhesUsuario";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function User() {
   const [objetos, setObjetos] = useState([]);
-  const { getUserDetails, userInfos, Logout } = useContext(AuthContext);
+  const { getUserDetails, userInfos } = useContext(AuthContext);
   const [error, setError] = useState(false);
   const [onDetails, setOnDetails] = useState(false);
   const [selectedObjeto, setSelectedObjeto] = useState(null);
   const [onNovaObservacao, setOnNovaObservacao] = useState(false);
   const [userDetails, setUserDetails] = useState(false);
+  const [userId, setUserId] = useState();
 
-  async function getAllUserObjs() {
-    await fetch(
-      "http://192.168.7.109:5251/api/Objeto/GetAllObjsByUserId/" +
-        userInfos.usuarioId,
-      {
-        method: "GET",
-        headers: { "content-type": "application/json" },
-      }
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        setObjetos(json);
-      })
-      .catch((err) => setError(true));
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  async function getUserInfo() {
+    await getUserDetails();
   }
 
   useEffect(() => {
     getAllUserObjs();
   }, []);
 
-  async function getUserInfo() {
-    getUserDetails();
-  }
-
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
-  async function handleLogout() {
-    Logout();
+  async function getAllUserObjs() {
+    const id = await AsyncStorage.getItem("userId");
+    setTimeout(async () => {
+      await fetch(
+        "http://192.168.7.109:5251/api/Objeto/GetAllObjsByUserId/" + id,
+        {
+          method: "GET",
+          headers: { "content-type": "application/json" },
+        }
+      )
+        .then((res) => res.json())
+        .then((json) => {
+          setObjetos(json);
+          console.log(json);
+        })
+        .catch((err) => setError(true));
+    }, 2000);
   }
 
   const handleDetails = (objeto) => {

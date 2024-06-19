@@ -26,7 +26,7 @@ export default function Home() {
       fade.setValue(0);
       Animated.timing(fade, {
         toValue: 1,
-        duration: 1000,
+        duration: 2250,
         useNativeDriver: true,
       }).start();
       getObjetos();
